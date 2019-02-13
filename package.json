@@ -2,8 +2,9 @@
   "name": "humbug",
   "version": "2.19.02",
   "author": "sebastian-raubach <sebastian.raubach@hutton.ac.uk>",
+  "homepage": "https://ics.hutton.ac.uk/humbug/",
   "description": "Humbug is a multi-platform barcode generator which can be used alongside our Germinate Scan application to generate sheets of user-defined barcodes to aid in the recording of data in the field or glasshouse.",
-  "license": null,
+  "license": "Apache-2.0",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
