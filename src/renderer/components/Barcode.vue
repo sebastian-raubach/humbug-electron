@@ -4,14 +4,14 @@
     <b-row>
       <b-col xs=12 class="card-actions">
         <b-button-group class="float-right flex-wrap">
-          <b-btn size=sm @click="onSelectImage()"><image-plus-icon /></b-btn>
-          <b-btn size=sm v-if="barcode.image" @click="barcode.image = null"><image-off-icon /></b-btn>
-          <b-btn size=sm :pressed.sync="barcodeTypeVisible"><barcode-scan-icon /></b-btn>
-          <b-btn size=sm @click="$emit('delete')" variant="danger"><delete-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleSelectImage')" @click="onSelectImage()"><image-plus-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleRemoveImage')" v-if="barcode.image" @click="barcode.image = null"><image-off-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleShowBarcode')" :pressed.sync="barcodeTypeVisible"><barcode-scan-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="$emit('delete')" variant="danger"><delete-icon /></b-btn>
         </b-button-group>
         <b-button-group class="float-right flex-wrap">
-          <b-btn size=sm @click="$emit('moveUp')" :disabled="index.position == 0"><arrow-top-left-icon /></b-btn>
-          <b-btn size=sm @click="$emit('moveDown')" :disabled="index.position == index.total - 1"><arrow-bottom-right-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleMoveUp')" @click="$emit('moveUp')" :disabled="index.position == 0"><arrow-top-left-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleMoveDown')" @click="$emit('moveDown')" :disabled="index.position == index.total - 1"><arrow-bottom-right-icon /></b-btn>
         </b-button-group>
       </b-col>
     </b-row>
@@ -20,7 +20,7 @@
     </b-card-body>
     <b-row class="card-body d-flex flex-column">
       <div class="mt-auto barcode-holder">
-        <template v-if="barcode.show && barcode.text">
+        <div v-if="barcode.show && barcode.text" :title="$t('titleClickToChangeBarcode')">
           <template v-if="barcode.type === 'QR'">
             <qrcode class="barcode" :value="barcode.text" @click.native="onBarcodeClicked()"/>
             <span class="qr-label">{{ barcode.text }}</span>
@@ -33,7 +33,7 @@
                 font="Segoe UI"
                 width=1 height=25 fontSize=14 background="rgba(0,0,0,0)" textMargin=0
                 @click.native="onBarcodeClicked()" />
-        </template>
+        </div>
         <input v-else v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" @blur="onFocusLost($event)" v-on:keyup.enter="onFocusLost($event)"/>
       </div>
     </b-row>
@@ -158,6 +158,9 @@ export default {
   }
   .barcode-holder {
     text-align: center;
+  }
+  .barcode-holder > :not(input):not(span) {
+    cursor: pointer;
   }
   .qr-label {
     display: block;

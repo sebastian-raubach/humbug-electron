@@ -1,4 +1,7 @@
-# humbug
+# Humbug
+
+[![Build Status](https://travis-ci.org/sebastian-raubach/humbug-electron.svg?branch=master)](https://travis-ci.org/sebastian-raubach/humbug-electron)
+[![Build status](https://ci.appveyor.com/api/projects/status/8l6x7a51pegas1dx?svg=true)](https://ci.appveyor.com/project/sebastian-raubach/humbug-electron)
 
 > Humbug is a multi-platform barcode generator which can be used alongside our Germinate Scan application to generate sheets of user-defined barcodes to aid in the recording of data in the field or glasshouse.
 

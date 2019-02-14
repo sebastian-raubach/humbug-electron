@@ -1,11 +1,13 @@
 const state = {
   defaultBarcodeType: 'CODE128',
-  onMissingBarcode: 'Skip image'
+  onMissingBarcode: 'Skip image',
+  locale: 'en_GB'
 }
 
 const getters = {
   defaultBarcodeType: state => state.defaultBarcodeType,
-  onMissingBarcode: state => state.onMissingBarcode
+  onMissingBarcode: state => state.onMissingBarcode,
+  locale: state => state.locale
 }
 
 const mutations = {
@@ -14,6 +16,9 @@ const mutations = {
   },
   SET_ON_MISSING_BARCODE (state, newOnMissingBarcode) {
     state.onMissingBarcode = newOnMissingBarcode
+  },
+  SET_LOCALE (state, newLocale) {
+    state.locale = newLocale
   }
 }
 
@@ -23,6 +28,9 @@ const actions = {
   },
   setOnMissingBarcode ({ commit }, onMissingBarcode) {
     commit('SET_ON_MISSING_BARCODE', onMissingBarcode)
+  },
+  setLocale ({ commit }, locale) {
+    commit('SET_LOCALE', locale)
   }
 }
 

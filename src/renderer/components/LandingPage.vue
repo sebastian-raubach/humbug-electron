@@ -6,31 +6,31 @@
     <b-container>
       <b-form class="row settings">
         <b-col sm=4>
-          <b-form-group label="Number of columns:" label-for="columns">
+          <b-form-group :label="$t('labelNumberOfColumns')" label-for="columns">
             <b-form-input id="columns"
                           type="number"
                           v-model="settings.nrOfColumns"
                           required
                           min=1
                           max=4
-                          placeholder="Number of columns">
+                          :placeholder="$t('labelNumberOfColumns')">
             </b-form-input>
           </b-form-group>
         </b-col>
         <b-col sm=4>
-          <b-form-group label="Max. image height:" label-for="height">
+          <b-form-group :label="$t('labelMaxImageHeight')" label-for="height">
             <b-form-input id="height"
                           type="number"
                           v-model="settings.maxHeight"
                           required
                           min=100
                           max=600
-                          placeholder="Max. image height">
+                          :placeholder="$t('labelMaxImageHeight')">
             </b-form-input>
           </b-form-group>
         </b-col>
         <b-col sm=4>
-          <b-form-group label="Default barcode type:" label-for="barcodeType">
+          <b-form-group :label="$t('labelDefaultBarcodeType')" label-for="barcodeType">
             <b-form-select id="barcodeType"
                         :options="barcodeTypes"
                         required
@@ -44,26 +44,26 @@
       <b-row v-for="i in Math.ceil(barcodes.length / (+settings.nrOfColumns))" :key="i" class="print-row">
         <b-col v-for="(barcode, index) in getBarcodeChunk(i - 1)" :key="index" :cols="12 / settings.nrOfColumns" class="mb-4">
           <Barcode :maxHeight="settings.maxHeight"
-                  :barcode="barcode"
-                  :index="{ position: ((i - 1) * settings.nrOfColumns) + index, total: barcodes.length }"
-                  :ref="'barcode-' + (((i - 1) * settings.nrOfColumns) + index)"
-                  v-on:delete="() => deleteBarcode(((i - 1) * settings.nrOfColumns) + index)"
-                  v-on:moveUp="() => moveUp(((i - 1) * settings.nrOfColumns) + index)"
-                  v-on:moveDown="() => moveDown(((i - 1) * settings.nrOfColumns) + index)" />
+                   :barcode="barcode"
+                   :index="{ position: ((i - 1) * settings.nrOfColumns) + index, total: barcodes.length }"
+                   :ref="'barcode-' + (((i - 1) * settings.nrOfColumns) + index)"
+                   v-on:delete="() => deleteBarcode(((i - 1) * settings.nrOfColumns) + index)"
+                   v-on:moveUp="() => moveUp(((i - 1) * settings.nrOfColumns) + index)"
+                   v-on:moveDown="() => moveDown(((i - 1) * settings.nrOfColumns) + index)" />
         </b-col>
       </b-row>
       
-      <b-btn class="no-print" variant="primary" @click="addBarcode()"><barcode-icon /> Add barcode</b-btn>
-      <b-btn class="no-print" variant="danger" v-b-modal.clear :disabled="!barcodes || barcodes.length === 0"><delete-icon /> Clear</b-btn>
-      <b-btn class="no-print" variant="success" :disabled="!barcodes || barcodes.length === 0" @click="print"><file-pdf-icon /> Export PDF</b-btn>
+      <b-btn class="no-print" variant="primary" @click="addBarcode()"><barcode-icon /> {{ $t("buttonAddBarcode") }}</b-btn>
+      <b-btn class="no-print" variant="danger" v-b-modal.clear :disabled="!barcodes || barcodes.length === 0"><delete-icon /> {{ $t("buttonClear") }}</b-btn>
+      <b-btn class="no-print" variant="success" :disabled="!barcodes || barcodes.length === 0" @click="print"><file-pdf-icon /> {{ $t("buttonExportPdf") }}</b-btn>
 
-      <b-modal ref="clipboardPreview" title="Clipboard preview" @ok="onProcessClipboard()">
-        <p>Each line will be imported as a separate barcode. Click OK to import the clipboard.</p>
+      <b-modal ref="clipboardPreview" :title="$t('dialogImportClipboardTitle')" @ok="onProcessClipboard()">
+        <p>{{ $t("dialogImportClipboardMessage") }}</p>
         <textarea v-model="clipboardContent" style="width: 100%; min-height: 30vh;"></textarea>
       </b-modal>
 
-      <b-modal id="clear" title="Clear barcodes" ok-title="Yes" cancel-title="No" ok-variant="danger" @ok="onClearPressed()">
-        <p>Are you sure you want to delete all barcodes?</p>
+      <b-modal id="clear" :title="$t('dialogClearBarcodesTitle')" :ok-title="$t('genericYes')" :cancel-title="$t('genericNo')" ok-variant="danger" @ok="onClearPressed()">
+        <p>{{ $t('dialogClearBarcodesMessage') }}</p>
       </b-modal>
     </b-container>
   </div>

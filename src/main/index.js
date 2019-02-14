@@ -9,6 +9,16 @@ const path = require('path')
 const ipc = electron.ipcMain
 const shell = electron.shell
 
+let mainWindow
+var messages = {}
+var menuTemplate = createMenuTemplate(null)
+
+ipc.on('locale', (event, result) => {
+  messages = result.i18n
+  menuTemplate = createMenuTemplate(result.locale)
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
+})
+
 ipc.on('print-to-pdf', (event, pdfPath) => {
   const win = BrowserWindow.fromWebContents(event.sender)
 
@@ -40,7 +50,6 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
@@ -63,67 +72,7 @@ function createWindow () {
     mainWindow = null
   })
 
-  var menu = Menu.buildFromTemplate([
-    {
-      label: 'File',
-      submenu: [
-        {
-          label: 'Import',
-          submenu: [{
-            label: 'From clipboard',
-            click () {
-              mainWindow.webContents.send('importDataClipboard')
-            }
-          }, {
-            label: 'From .json file',
-            click () {
-              mainWindow.webContents.send('importDataJson')
-            }
-          }]
-        },
-        {
-          label: 'Export .json file',
-          click () {
-            mainWindow.webContents.send('exportData')
-          }
-        },
-        {
-          label: 'Save as PDF',
-          click () {
-            mainWindow.webContents.send('onPrint')
-          }
-        },
-        {
-          label: 'Bulk image renaming',
-          click () {
-            mainWindow.webContents.send('navigate', 'image-renaming')
-          }
-        },
-        {
-          label: 'Exit',
-          click () {
-            app.quit()
-          }
-        }
-      ]
-    }, {
-      label: 'Help',
-      submenu: [
-        {
-          label: 'Online help',
-          click () {
-            shell.openExternal('https://github.com/sebastian-raubach/humbug/wiki')
-          }
-        }, {
-          label: 'About',
-          click () {
-            mainWindow.webContents.send('navigate', 'about')
-          }
-        }
-      ]
-    }
-  ])
-  Menu.setApplicationMenu(menu)
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
 }
 
 app.on('ready', createWindow)
@@ -139,6 +88,90 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+function createMenuTemplate (locale) {
+  return [
+    {
+      label: messages.menuFile,
+      submenu: [
+        {
+          label: messages.menuFileImport,
+          submenu: [{
+            label: messages.menuFileImportClipboard,
+            click () {
+              mainWindow.webContents.send('importDataClipboard')
+            }
+          }, {
+            label: messages.menuFileImportJson,
+            click () {
+              mainWindow.webContents.send('importDataJson')
+            }
+          }]
+        },
+        {
+          label: messages.menuFileExportJson,
+          click () {
+            mainWindow.webContents.send('exportData')
+          }
+        },
+        {
+          label: messages.menuFileSaveAsPdf,
+          click () {
+            mainWindow.webContents.send('onPrint')
+          }
+        },
+        {
+          label: messages.menuFileBulkImageRenaming,
+          click () {
+            mainWindow.webContents.send('navigate', 'image-renaming')
+          }
+        },
+        {
+          label: messages.menuFileExit,
+          click () {
+            app.quit()
+          }
+        }
+      ]
+    }, {
+      label: messages.menuLanguage,
+      submenu: [
+        {
+          label: 'British English',
+          type: 'radio',
+          checked: locale === 'en_GB',
+          icon: path.join(__dirname, 'assets/gb.png'),
+          click () {
+            mainWindow.webContents.send('locale', 'en_GB')
+          }
+        }, {
+          label: 'Deutsch - Deutschland',
+          type: 'radio',
+          checked: locale === 'de_DE',
+          icon: path.join(__dirname, 'assets/de.png'),
+          click () {
+            mainWindow.webContents.send('locale', 'de_DE')
+          }
+        }
+      ]
+    }, {
+      label: messages.menuHelp,
+      submenu: [
+        {
+          label: messages.menuHelpOnline,
+          click () {
+            shell.openExternal('https://github.com/sebastian-raubach/humbug/wiki')
+          }
+        }, {
+          label: messages.menuHelpAbout,
+          click () {
+            mainWindow.webContents.send('navigate', 'about')
+          }
+        }
+      ]
+    }
+  ]
+}
 
 /**
  * Auto Updater

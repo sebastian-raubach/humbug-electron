@@ -1,17 +1,17 @@
 <template>
   <div>
     <b-navbar toggleable="md" type="dark" variant="primary" class="navbar-margin">
-      <b-navbar-brand href="#" @click="back"><back-icon :size="48" /> <img id="logo" src="~@/assets/logo-no-bg.svg" width="30" height="30" class="d-inline-block align-top"> Image renamer</b-navbar-brand>
+      <b-navbar-brand :title="$t('navigationBack')" href="#" @click="back"><back-icon :size="48" /> <img id="logo" src="~@/assets/logo-no-bg.svg" width="30" height="30" class="d-inline-block align-top"> {{ $t('menuFileBulkImageRenaming') }}</b-navbar-brand>
     </b-navbar>
     <b-container>
-      <p>Please select the folder containing the images to rename, as well as the folder where you want the renamed images to be stored.</p>
+      <p>{{ $t('imageRenamerMessage') }}</p>
 
       <b-form>
         <b-row>
           <b-col sm=4>
-            <b-form-group label="Source folder" label-for="sourcePath">
+            <b-form-group :label="$t('labelSourceFolder')" label-for="sourcePath">
               <b-input-group>
-                <b-form-input id="sourcePath" type=text :value="sourcePath" @change.native="updateSourcePath"></b-form-input>
+                <b-form-input id="sourcePath" type=text :value="sourcePath" :placeholder="$t('labelSourceFolder')" @change.native="updateSourcePath"></b-form-input>
                 <b-input-group-append>
                   <b-btn variant="secondary" @click="selectSource()">...</b-btn>
                 </b-input-group-append>
@@ -19,9 +19,9 @@
             </b-form-group>
           </b-col>
           <b-col sm=4>
-            <b-form-group label="Target folder" label-for="targetPath">
+            <b-form-group :label="$t('labelTargetFolder')" label-for="targetPath">
               <b-input-group>
-                <b-form-input id="targetPath" type=text :value="targetPath" @change.native="updateTargetPath"></b-form-input>
+                <b-form-input id="targetPath" type=text :value="targetPath" :placeholder="$t('labelTargetFolder')" @change.native="updateTargetPath"></b-form-input>
                 <b-input-group-append>
                   <b-btn variant="secondary" @click="selectTarget()">...</b-btn>
                 </b-input-group-append>
@@ -29,13 +29,13 @@
             </b-form-group>
           </b-col>
           <b-col sm=4>
-            <b-form-group label="On missing barcode" label-for="onMissing">
+            <b-form-group :label="$t('labelOnMissingBarcode')" label-for="onMissing">
               <b-form-select id="onMissing" :options="onMissingOptions" :value="onMissingBarcode" @change.native="updateOnMissingBarcode"></b-form-select>
             </b-form-group>
           </b-col>
         </b-row>
       </b-form>
-      <b-btn @click="start()" variant="primary">Start</b-btn>
+      <b-btn @click="start()" variant="primary">{{ $t('buttonStart') }}</b-btn>
       <!-- Show the progress -->
       <b-progress :value="index" :max="images.length" show-progress :animated="index < images.length" :variant="index < images.length ? 'info' : 'success'" class="img-progress" v-if="images && images.length > 0"/>
 
@@ -58,7 +58,7 @@ const dialog = app.dialog
 export default {
   data: function () {
     return {
-      onMissingOptions: ['Skip image', 'Copy original'],
+      onMissingOptions: [this.$t('valueOnMisingBarcodeSkipImage'), this.$t('valueOnMisingBarcodeCopyOriginal')],
       images: [],
       index: 0,
       currentImage: null,
@@ -145,7 +145,7 @@ export default {
     },
     // Handle the case where no barcode is found
     handleMissing: function () {
-      if (this.handleMissing === 'Copy original') {
+      if (this.handleMissing === this.$t('valueOnMisingBarcodeCopyOriginal')) {
         var fileName = path.basename(this.currentImagePath)
 
         var targetFile = path.join(this.targetPath, fileName)
