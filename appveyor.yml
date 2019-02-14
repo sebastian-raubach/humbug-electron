@@ -18,7 +18,7 @@ init:
   - git config --global core.autocrlf input
 
 install:
-  - ps: Install-Product node 8 x64
+  - ps: Install-Product node 10 x64
   - git reset --hard HEAD
   - yarn
   - node --version
@@ -27,3 +27,10 @@ build_script:
   - yarn build
 
 test: off
+
+deploy:
+  - provider: GitHub
+    auth_token:
+      secure: Wx+ia6RAK/1hW7rGilzZCX8cG9OCwlcMXIj8pBxRzUM0FHsrLko48kpSH2+5Vogp
+    draft: true
+    force_update: true
