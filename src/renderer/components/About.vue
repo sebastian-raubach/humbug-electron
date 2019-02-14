@@ -21,12 +21,12 @@
     <b-container>
       <b-row class="h-100">
         <b-col sm=6 class="my-auto">
-          <a href="http://www.hutton.ac.uk" target="_blank" title="The James Hutton Institute">
+          <a href="javascript:;" @click="open('http://www.hutton.ac.uk/')" title="The James Hutton Institute">
             <img class="img-fluid header-img mx-auto d-block" src="~@/assets/jhi.svg">
           </a>
         </b-col>
         <b-col sm=6 class="my-auto">
-          <a href="https://ics.hutton.ac.uk" target="_blank" title="Software Development Group">
+          <a href="javascript:;" @click="open('https://ics.hutton.ac.uk/')" target="_blank" title="Software Development Group">
             <img class="img-fluid header-img mx-auto d-block" src="~@/assets/sdg.svg" >
           </a>
         </b-col>
@@ -39,9 +39,9 @@
 
       <div class="text-center">
         <b-btn-group>
-          <b-btn><web-icon /> Humbug homepage</b-btn>
-          <b-btn><email-icon /> Send us an email</b-btn>
-          <b-btn><twitter-icon /> Follow us on Twitter</b-btn>
+          <b-btn @click="open('https://ics.hutton.ac.uk/humbug')"><web-icon /> Humbug homepage</b-btn>
+          <b-btn @click="open('mailto:germinate@hutton.ac.uk?subject=Humbug')"><email-icon /> Send us an email</b-btn>
+          <b-btn @click="open('https://twitter.com/cropgeeks')"><twitter-icon /> Follow us on Twitter</b-btn>
         </b-btn-group>
       </div>
     </b-container>
@@ -54,6 +54,7 @@ import EmailIcon from 'vue-material-design-icons/Email.vue'
 import TwitterIcon from 'vue-material-design-icons/Twitter.vue'
 import WebIcon from 'vue-material-design-icons/Web.vue'
 const { app } = require('electron').remote
+const shell = require('electron').shell
 
 export default {
   data: function () {
@@ -67,6 +68,9 @@ export default {
   methods: {
     back: function () {
       this.$router.push('landing-page')
+    },
+    open: function (toOpen) {
+      shell.openExternal(toOpen)
     }
   }
 }

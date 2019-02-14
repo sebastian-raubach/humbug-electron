@@ -6,6 +6,7 @@
         <b-button-group class="float-right flex-wrap">
           <b-btn size=sm @click="onSelectImage()"><image-plus-icon /></b-btn>
           <b-btn size=sm v-if="barcode.image" @click="barcode.image = null"><image-off-icon /></b-btn>
+          <b-btn size=sm :pressed.sync="barcodeTypeVisible"><barcode-scan-icon /></b-btn>
           <b-btn size=sm @click="$emit('delete')" variant="danger"><delete-icon /></b-btn>
         </b-button-group>
         <b-button-group class="float-right flex-wrap">
@@ -14,6 +15,9 @@
         </b-button-group>
       </b-col>
     </b-row>
+    <b-card-body class="no-print">
+      <b-form-select :options="barcodeTypes" v-model="barcode.type" v-if="barcodeTypeVisible"/>
+    </b-card-body>
     <b-row class="card-body d-flex flex-column">
       <div class="mt-auto barcode-holder">
         <template v-if="barcode.show && barcode.text">
@@ -44,6 +48,7 @@ import ImagePlusIcon from 'vue-material-design-icons/ImagePlus.vue'
 import ImageOffIcon from 'vue-material-design-icons/ImageOff.vue'
 import ArrowTopLeftIcon from 'vue-material-design-icons/ArrowTopLeft.vue'
 import ArrowBottomRightIcon from 'vue-material-design-icons/ArrowBottomRight.vue'
+import BarcodeScanIcon from 'vue-material-design-icons/BarcodeScan.vue'
 
 const app = require('electron').remote
 const path = require('path')
@@ -53,6 +58,10 @@ export default {
   name: 'barcode',
   data: function () {
     return {
+      barcodeTypeVisible: false,
+      barcodeTypes: [
+        'CODE128', 'CODE39', 'QR'
+      ]
     }
   },
   props: {
@@ -77,7 +86,8 @@ export default {
     ImagePlusIcon,
     ImageOffIcon,
     ArrowTopLeftIcon,
-    ArrowBottomRightIcon
+    ArrowBottomRightIcon,
+    BarcodeScanIcon
   },
   methods: {
     getMaxHeight: function () {
@@ -154,7 +164,8 @@ export default {
   }
 
   @media print {
-    .card-actions {
+    .card-actions,
+    .no-print {
       display: none !important;
     }
     .has-image .card-img {
