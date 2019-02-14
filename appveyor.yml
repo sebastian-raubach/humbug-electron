@@ -31,6 +31,6 @@ test: off
 deploy:
   - provider: GitHub
     auth_token:
-      secure: Wx+ia6RAK/1hW7rGilzZCX8cG9OCwlcMXIj8pBxRzUM0FHsrLko48kpSH2+5Vogp
+      secure: PU77/EjfyHLGj7EJLs9ETBTuWOMHFHtzJDbfCT2un66jkEKDsqV07acw78qYVL9p
     draft: true
     force_update: true
