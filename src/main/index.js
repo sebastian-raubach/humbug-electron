@@ -106,6 +106,11 @@ function createMenuTemplate (locale) {
             click () {
               mainWindow.webContents.send('importDataJson')
             }
+          }, {
+            label: messages.menuFileImportText,
+            click () {
+              mainWindow.webContents.send('importDataTxt')
+            }
           }]
         },
         {

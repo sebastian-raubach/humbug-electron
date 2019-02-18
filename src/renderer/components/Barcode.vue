@@ -4,14 +4,14 @@
     <b-row>
       <b-col xs=12 class="card-actions">
         <b-button-group class="float-right flex-wrap">
-          <b-btn size=sm :title="$t('buttonTitleSelectImage')" @click="onSelectImage()"><image-plus-icon /></b-btn>
-          <b-btn size=sm :title="$t('buttonTitleRemoveImage')" v-if="barcode.image" @click="barcode.image = null"><image-off-icon /></b-btn>
-          <b-btn size=sm :title="$t('buttonTitleShowBarcode')" :pressed.sync="barcodeTypeVisible"><barcode-scan-icon /></b-btn>
-          <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="$emit('delete')" variant="danger"><delete-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleSelectImage')" @click="onSelectImage()"><image-plus-icon :title="$t('buttonTitleSelectImage')" /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleRemoveImage')" v-if="barcode.image" @click="barcode.image = null"><image-off-icon :title="$t('buttonTitleRemoveImage')"/></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleShowBarcode')" :pressed.sync="barcodeTypeVisible"><barcode-scan-icon :title="$t('buttonTitleShowBarcode')"/></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="$emit('delete')" variant="danger"><delete-icon :title="$t('buttonTitleDeleteBarcode')"/></b-btn>
         </b-button-group>
         <b-button-group class="float-right flex-wrap">
-          <b-btn size=sm :title="$t('buttonTitleMoveUp')" @click="$emit('moveUp')" :disabled="index.position == 0"><arrow-top-left-icon /></b-btn>
-          <b-btn size=sm :title="$t('buttonTitleMoveDown')" @click="$emit('moveDown')" :disabled="index.position == index.total - 1"><arrow-bottom-right-icon /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleMoveUp')" @click="$emit('moveUp')" :disabled="index.position == 0"><arrow-top-left-icon :title="$t('buttonTitleMoveUp')"/></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleMoveDown')" @click="$emit('moveDown')" :disabled="index.position == index.total - 1"><arrow-bottom-right-icon :title="$t('buttonTitleMoveDown')"/></b-btn>
         </b-button-group>
       </b-col>
     </b-row>
@@ -119,12 +119,12 @@ export default {
           extensions: ['jpg', 'jpeg', 'png']
         }],
         defaultPath: this.imagePath
-      }, function (file) {
+      }, async function (file) {
         if (file) {
           vm.$store.dispatch('setImagePath', path.dirname(file[0]))
 
           vm.barcode.image = {
-            base64: vm.getBase64(file[0]),
+            base64: await vm.getSmallBase64(file[0]),
             path: file[0]
           }
         }

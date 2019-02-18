@@ -40,6 +40,7 @@
       <div class="text-center">
         <b-btn-group>
           <b-btn @click="open('https://ics.hutton.ac.uk/humbug')"><web-icon /> {{ $t('buttonVisitHomepage') }}</b-btn>
+          <b-btn @click="open('https://github.com/sebastian-raubach/humbug-electron')"><github-circle-icon /> {{ $t('buttonVisitGithub') }}</b-btn>
           <b-btn @click="open('mailto:germinate@hutton.ac.uk?subject=Humbug')"><email-icon /> {{ $t('buttonSendEmail') }}</b-btn>
           <b-btn @click="open('https://twitter.com/cropgeeks')"><twitter-icon /> {{ $t('buttonFollowTwitter') }}</b-btn>
         </b-btn-group>
@@ -220,9 +221,8 @@
 import BackIcon from 'vue-material-design-icons/ArrowLeft.vue'
 import EmailIcon from 'vue-material-design-icons/Email.vue'
 import TwitterIcon from 'vue-material-design-icons/Twitter.vue'
+import GithubCircleIcon from 'vue-material-design-icons/GithubCircle.vue'
 import WebIcon from 'vue-material-design-icons/Web.vue'
-import fs from 'fs'
-import path from 'path'
 const { app } = require('electron').remote
 const shell = require('electron').shell
 
@@ -233,7 +233,7 @@ export default {
     }
   },
   components: {
-    BackIcon, EmailIcon, TwitterIcon, WebIcon
+    BackIcon, EmailIcon, TwitterIcon, WebIcon, GithubCircleIcon
   },
   methods: {
     back: function () {
@@ -242,10 +242,6 @@ export default {
     open: function (toOpen) {
       shell.openExternal(toOpen)
     }
-  },
-  mounted: function () {
-    var fileContents = fs.readFileSync(path.join(__static, '/LICENSE.txt'), 'utf8')
-    console.log(fileContents)
   }
 }
 </script>

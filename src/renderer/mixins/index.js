@@ -1,4 +1,5 @@
 var fs = require('fs')
+const sharp = require('sharp')
 var path = require('path')
 
 export default {
@@ -11,6 +12,20 @@ export default {
       result = result.replace('data:image/jpeg;base64,', '')
 
       return result
+    },
+    async getSmallBase64 (file) {
+      var ext = path.extname(file).toLowerCase()
+      var base64 = await sharp(file)
+        .resize({ width: 512 })
+        .toBuffer()
+
+      base64 = base64.toString('base64')
+
+      if (ext === '.png') {
+        return 'data:image/png;base64,' + base64
+      } else if (ext === '.jpg' || ext === '.jpeg') {
+        return 'data:image/jpeg;base64,' + base64
+      }
     },
     getBase64: function (file) {
       var ext = path.extname(file).toLowerCase()

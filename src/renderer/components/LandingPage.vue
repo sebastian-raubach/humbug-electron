@@ -80,6 +80,7 @@
   const dialog = app.dialog
   const fs = require('fs')
   const path = require('path')
+  const readline = require('readline')
   const ipc = require('electron').ipcRenderer
 
   export default {
@@ -190,19 +191,45 @@
             name: 'Json',
             extensions: ['json']
           }]
-        }, function (file) {
-          if (file) {
-            var temp = JSON.parse(fs.readFileSync(file[0], 'utf-8'))
+        }, async function (file) {
+          if (file && file.length > 0) {
+            var json = JSON.parse(fs.readFileSync(file[0], 'utf-8'))
 
-            temp.forEach(function (barcode) {
-              if (barcode.image && barcode.image.path) {
-                barcode.image.base64 = vm.getBase64(barcode.image.path)
-              }
-            })
-
-            vm.barcodes = temp
+            await vm.onJsonLoaded(json)
           }
         })
+      },
+      importDataTxt: function () {
+        var vm = this
+
+        dialog.showOpenDialog({
+          properties: ['openFile'],
+          filters: [{
+            name: 'Text',
+            extensions: ['txt']
+          }]
+        }, async function (file) {
+          if (file && file.length > 0) {
+            var lineReader = readline.createInterface({
+              input: fs.createReadStream(file[0])
+            })
+
+            lineReader.on('line', function (line) {
+              if (line.trim().length > 0) {
+                vm.addBarcode(line)
+              }
+            })
+          }
+        })
+      },
+      async onJsonLoaded (json) {
+        for (var i = 0; i < json.length; i++) {
+          if (json[i].image && json[i].image.path) {
+            json[i].image.base64 = await this.getSmallBase64(json[i].image.path)
+          }
+        }
+
+        this.barcodes = json
       },
       onProcessClipboard: function () {
         var lines = this.clipboardContent.split('\n')
@@ -228,12 +255,14 @@
       ipc.on('exportData', this.exportData)
       ipc.on('importDataClipboard', this.importDataClipboard)
       ipc.on('importDataJson', this.importDataJson)
+      ipc.on('importDataTxt', this.importDataTxt)
     },
     beforeDestroy: function () {
       ipc.removeAllListeners('onPrint')
       ipc.removeAllListeners('exportData')
       ipc.removeAllListeners('importDataClipboard')
       ipc.removeAllListeners('importDataJson')
+      ipc.removeAllListeners('importDataTxt')
     }
   }
 </script>
