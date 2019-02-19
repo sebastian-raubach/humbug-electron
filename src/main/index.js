@@ -47,7 +47,7 @@ ipc.on('print-to-pdf', (event, pdfPath) => {
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
 const winURL = process.env.NODE_ENV === 'development'
@@ -145,7 +145,7 @@ function createMenuTemplate (locale) {
           label: 'British English',
           type: 'radio',
           checked: locale === 'en_GB',
-          icon: path.join(__dirname, 'assets/gb.png'),
+          icon: path.join(__static, 'gb.png'),
           click () {
             mainWindow.webContents.send('locale', 'en_GB')
           }
@@ -153,7 +153,7 @@ function createMenuTemplate (locale) {
           label: 'Deutsch - Deutschland',
           type: 'radio',
           checked: locale === 'de_DE',
-          icon: path.join(__dirname, 'assets/de.png'),
+          icon: path.join(__static, 'de.png'),
           click () {
             mainWindow.webContents.send('locale', 'de_DE')
           }
