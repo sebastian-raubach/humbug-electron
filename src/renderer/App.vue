@@ -126,7 +126,7 @@
       this.checkForUpdates(true)
     },
     beforeDestroy: function () {
-      // Stop listening
+      // Stop listening; teardown
       ipc.removeAllListeners('navigate')
       ipc.removeAllListeners('locale')
       ipc.removeAllListeners('checkUpdates')
