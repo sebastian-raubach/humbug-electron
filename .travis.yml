@@ -41,5 +41,14 @@ deploy:
   api_key: $GH_TOKEN
   skip_cleanup: true
   prerelease: true
+  overwrite: true
+  draft: true
+  file:
+  - build/**/*.zip
+  - build/**/*.dmg
+  - build/**/*.deb
+  - build/**/*.snap
+  - build/**/*.AppImage
+  - build/**/*.tar.gz
   on:
     tags: true
