@@ -4,6 +4,7 @@ skip_non_tags: true
 branches:
   only:
     - master
+    - /^v.*$/
 
 image: Visual Studio 2017
 platform:
