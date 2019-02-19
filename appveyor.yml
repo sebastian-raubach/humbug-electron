@@ -39,7 +39,7 @@ artifacts:
 deploy:
   - provider: GitHub
     auth_token:
-      secure: "$GH_TOKEN"
+      secure: PU77/EjfyHLGj7EJLs9ETBTuWOMHFHtzJDbfCT2un66jkEKDsqV07acw78qYVL9p
     artifact: exeinstaller
     draft: true
     prerelease: true

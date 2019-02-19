@@ -36,21 +36,27 @@
           .then(function (response) {
             console.log('error', response.code)
             if (response && response.data) {
-              if (automaticTrigger === true && response.data.tag_name === vm.versionToIgnore) {
+              if (response.data.tag_name === vm.versionToIgnore && automaticTrigger === true) {
                 // User chose to ignore this version
                 console.log('user chose to ignore this version')
               } else {
                 console.log(response.data.tag_name, app.getVersion())
-                try {
-                  var result = compareVersions(response.data.tag_name, app.getVersion())
-                  if (result === 1) {
-                    vm.showUpdateDialog(response.data)
-                  } else {
+
+                if (response.data.assets.length < 1) {
+                  // There is a new release, but no associated assets
+                  console.log('no assets for release')
+                } else {
+                  try {
+                    var result = compareVersions(response.data.tag_name, app.getVersion())
+                    if (result === 1) {
+                      vm.showUpdateDialog(response.data)
+                    } else {
+                      vm.showNoUpdateDialog()
+                    }
+                  } catch (err) {
+                    console.error('Invalid version number', response.data.tag_name, app.getVersion())
                     vm.showNoUpdateDialog()
                   }
-                } catch (err) {
-                  console.error('Invalid version number', response.data.tag_name, app.getVersion())
-                  vm.showNoUpdateDialog()
                 }
               }
             }
