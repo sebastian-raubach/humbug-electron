@@ -1,13 +1,15 @@
 const state = {
   defaultBarcodeType: 'CODE128',
   onMissingBarcode: 'Skip image',
-  locale: 'en_GB'
+  locale: 'en_GB',
+  versionToIgnore: null
 }
 
 const getters = {
   defaultBarcodeType: state => state.defaultBarcodeType,
   onMissingBarcode: state => state.onMissingBarcode,
-  locale: state => state.locale
+  locale: state => state.locale,
+  versionToIgnore: state => state.versionToIgnore
 }
 
 const mutations = {
@@ -19,6 +21,9 @@ const mutations = {
   },
   SET_LOCALE (state, newLocale) {
     state.locale = newLocale
+  },
+  SET_VERSION_TO_IGNORE (state, newVersionToIgnore) {
+    state.versionToIgnore = newVersionToIgnore
   }
 }
 
@@ -31,6 +36,9 @@ const actions = {
   },
   setLocale ({ commit }, locale) {
     commit('SET_LOCALE', locale)
+  },
+  setVersionToIgnore ({ commit }, versionToIgnore) {
+    commit('SET_VERSION_TO_IGNORE', versionToIgnore)
   }
 }
 

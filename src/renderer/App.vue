@@ -6,13 +6,19 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  const remote = require('electron').remote
+  const app = remote.app
+  const dialog = remote.dialog
+  const shell = remote.shell
   const ipc = require('electron').ipcRenderer
+  const compareVersions = require('compare-versions')
 
   export default {
     name: 'humbug',
     computed: {
       ...mapGetters([
-        'locale'
+        'locale',
+        'versionToIgnore'
       ])
     },
     methods: {
@@ -23,12 +29,83 @@
       onLocaleChange: function (event, newLocale) {
         this.$i18n.locale = newLocale
         this.$store.dispatch('setLocale', newLocale)
+      },
+      checkForUpdates (automaticTrigger) {
+        var vm = this
+        this.checkRelease()
+          .then(function (response) {
+            console.log('error', response.code)
+            if (response && response.data) {
+              if (automaticTrigger === true && response.data.tag_name === vm.versionToIgnore) {
+                // User chose to ignore this version
+                console.log('user chose to ignore this version')
+              } else {
+                console.log(response.data.tag_name, app.getVersion())
+                try {
+                  var result = compareVersions(response.data.tag_name, app.getVersion())
+                  if (result === 1) {
+                    vm.showUpdateDialog(response.data)
+                  } else {
+                    vm.showNoUpdateDialog()
+                  }
+                } catch (err) {
+                  console.error('Invalid version number', response.data.tag_name, app.getVersion())
+                  vm.showNoUpdateDialog()
+                }
+              }
+            }
+          })
+          .catch(function (err) {
+            if (err.response && err.response.status) {
+              // The request failed based on a genuine error code
+              console.error(err)
+              if (automaticTrigger !== true) {
+                vm.showNoUpdateDialog()
+              }
+            } else {
+              // It's a network error (e.g. no network connection)
+              console.log('ERROR', JSON.stringify(err))
+            }
+          })
+      },
+      showNoUpdateDialog () {
+        dialog.showMessageBox(remote.getCurrentWindow(), {
+          type: 'info',
+          title: this.$t('dialogNoNewVersionTitle'),
+          message: this.$t('dialogNoNewVersionMessage')
+        })
+      },
+      showUpdateDialog: function (update) {
+        var vm = this
+        dialog.showMessageBox(remote.getCurrentWindow(), {
+          type: 'question',
+          buttons: [this.$t('buttonSkipVersion'), this.$t('genericYes'), this.$t('genericNo')],
+          defaultId: 1,
+          cancelId: 2,
+          noLink: true,
+          title: this.$t('dialogNewVersionTitle'),
+          message: this.$t('dialogNewVersionMessage'),
+          detail: this.$t('dialogNewVersionNumber', [update.tag_name, new Date(update.published_at).toLocaleString(this.locale.replace('_', '-'))])
+        }, function (result) {
+          switch (result) {
+            case 0:
+              vm.$store.dispatch('setVersionToIgnore', update.tag_name)
+              break
+            case 1:
+              shell.openExternal(update.html_url)
+              break
+            case 2:
+            default:
+              console.log('no')
+          }
+        })
       }
     },
     mounted: function () {
       // Listen to navigation events sent from the electron menu
       ipc.on('navigate', this.navigate)
       ipc.on('locale', this.onLocaleChange)
+      ipc.on('checkUpdates', this.checkForUpdates)
 
       var vm = this
       this.$store.watch(function (state) {
@@ -45,11 +122,14 @@
         locale: this.locale,
         i18n: this.$i18n.messages[this.locale]
       })
+
+      this.checkForUpdates(true)
     },
     beforeDestroy: function () {
       // Stop listening
       ipc.removeAllListeners('navigate')
       ipc.removeAllListeners('locale')
+      ipc.removeAllListeners('checkUpdates')
     }
   }
 </script>

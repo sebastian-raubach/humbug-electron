@@ -168,6 +168,11 @@ function createMenuTemplate (locale) {
             shell.openExternal('https://github.com/sebastian-raubach/humbug/wiki')
           }
         }, {
+          label: messages.menuHelpCheckUpdates,
+          click () {
+            mainWindow.webContents.send('checkUpdates')
+          }
+        }, {
           label: messages.menuHelpAbout,
           click () {
             mainWindow.webContents.send('navigate', 'about')

@@ -1,9 +1,13 @@
 var fs = require('fs')
 const sharp = require('sharp')
 var path = require('path')
+var axios = require('axios')
 
 export default {
   methods: {
+    checkRelease: function () {
+      return axios.get('https://api.github.com/repos/sebastian-raubach/humbug-electron/releases/latest')
+    },
     cloneObject: function (input) {
       return JSON.parse(JSON.stringify(input))
     },
