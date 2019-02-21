@@ -53,13 +53,16 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/icon.icns",
+      "artifactName":  "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "artifactName":  "${productName}-${version}-${arch}.${ext}"
     },
     "linux": {
       "icon": "build/icons",
+      "artifactName":  "${productName}-${version}-${arch}.${ext}",
       "target": [
         "AppImage",
         "deb"

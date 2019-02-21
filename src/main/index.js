@@ -74,6 +74,11 @@ function createWindow () {
     mainWindow = null
   })
 
+  // Prevent the title change to lower case...
+  mainWindow.on('page-title-updated', function (e) {
+    e.preventDefault()
+  })
+
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
 }
 
