@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow, Menu } from 'electron'
+// import { autoUpdater } from 'electron-updater'
 
 // Printing to PDF
 const electron = require('electron')
@@ -8,6 +9,7 @@ const fs = require('fs')
 const path = require('path')
 const ipc = electron.ipcMain
 const shell = electron.shell
+const nativeImage = electron.nativeImage
 
 let mainWindow
 var messages = {}
@@ -90,6 +92,9 @@ app.on('activate', () => {
 })
 
 function createMenuTemplate (locale) {
+  var deImage = nativeImage.createFromPath(path.join(__static, 'de.png'))
+  var gbImage = nativeImage.createFromPath(path.join(__static, 'gb.png'))
+
   return [
     {
       label: messages.menuFile,
@@ -145,7 +150,7 @@ function createMenuTemplate (locale) {
           label: 'British English',
           type: 'radio',
           checked: locale === 'en_GB',
-          icon: path.join(__static, 'gb.png'),
+          icon: gbImage.isEmpty() ? null : gbImage,
           click () {
             mainWindow.webContents.send('locale', 'en_GB')
           }
@@ -153,7 +158,7 @@ function createMenuTemplate (locale) {
           label: 'Deutsch - Deutschland',
           type: 'radio',
           checked: locale === 'de_DE',
-          icon: path.join(__static, 'de.png'),
+          icon: deImage.isEmpty() ? null : deImage,
           click () {
             mainWindow.webContents.send('locale', 'de_DE')
           }
@@ -190,15 +195,19 @@ function createMenuTemplate (locale) {
  * support auto updating. Code Signing with a valid certificate is required.
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
+// autoUpdater.on('update-downloaded', () => {
+//   autoUpdater.quitAndInstall()
+// })
 
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
+// app.on('ready', () => {
+//   try {
+//     if (process.env.NODE_ENV === 'production') {
+//       autoUpdater.checkForUpdates()
+//     } else {
+//       autoUpdater.updateConfigPath = path.join(__dirname, '../../dev-app-update.yml')
+//       autoUpdater.checkForUpdatesAndNotify()
+//     }
+//   } catch (error) {
+//     console.error(error)
+//   }
+// })

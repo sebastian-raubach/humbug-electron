@@ -45,6 +45,9 @@
                 if (response.data.assets.length < 1) {
                   // There is a new release, but no associated assets
                   console.log('no assets for release')
+                  if (automaticTrigger !== true) {
+                    vm.showNoUpdateDialog()
+                  }
                 } else {
                   try {
                     var result = compareVersions(response.data.tag_name, app.getVersion())
