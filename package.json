@@ -27,6 +27,7 @@
   "build": {
     "productName": "Humbug",
     "appId": "uk.ac.hutton.humbug",
+    "asar": false,
     "directories": {
       "output": "build"
     },
