@@ -3,6 +3,8 @@
 [![Build Status](https://travis-ci.org/sebastian-raubach/humbug-electron.svg?branch=master)](https://travis-ci.org/sebastian-raubach/humbug-electron)
 [![Build status](https://ci.appveyor.com/api/projects/status/8l6x7a51pegas1dx?svg=true)](https://ci.appveyor.com/project/sebastian-raubach/humbug-electron)
 
+![Logo](src/main/assets/logo.png?raw=true "Logo")
+
 > Humbug is a multi-platform barcode generator which can be used alongside our Germinate Scan application to generate sheets of user-defined barcodes to aid in the recording of data in the field or glasshouse.
 
 #### Build Setup
@@ -22,6 +24,12 @@ npm run build
 npm run lint
 
 ```
+
+In some cases it may be necessary to run
+``` bash
+node_modules/.bin/electron-rebuild -f -w sharp
+```
+To rebuild an image manipulation library that uses native libraries.
 
 ---
 
