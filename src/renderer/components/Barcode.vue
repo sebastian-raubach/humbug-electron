@@ -1,5 +1,5 @@
 <template>
-  <b-card :class="'h-100 ' + hasImage()" no-body v-if="barcode">
+  <b-card :class="'h-100 ' + hasImage() + ' ' + hidePrint()" no-body v-if="barcode">
     <img :src="barcode.image ? barcode.image.base64 : null" class="card-img" :style="getMaxHeight()">
     <b-row>
       <b-col xs=12 class="card-actions">
@@ -95,6 +95,9 @@ export default {
     },
     hasImage: function () {
       return this.barcode.image ? 'has-image' : ''
+    },
+    hidePrint: function () {
+      return (this.barcode.text === undefined || this.barcode.text.length < 1) ? 'no-print' : ''
     },
     onFocusLost: function (event) {
       this.barcode.show = true

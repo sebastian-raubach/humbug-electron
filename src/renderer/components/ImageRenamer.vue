@@ -41,13 +41,27 @@
 
       <!-- This image is used to render the base64 image and get the barcode. It's hidden because we don't need to show it -->
       <img ref="img" :src="currentImage" class="img-responsive w-100" @load="onImageLoad()" style="display: none;"/>
+
+      <p />
+
+      <b-table striped hover bordered responsive :items="processedItems" v-if="processedItems" >
+        <template slot="status" slot-scope="data">
+          <check-icon v-if="data.value === 'success'" />
+          <template v-else>
+            <alert-icon />
+            {{ data.value }}
+          </template>
+        </template>
+      </b-table>
     </b-container>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import AlertIcon from 'vue-material-design-icons/Alert.vue'
 import BackIcon from 'vue-material-design-icons/ArrowLeft.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 const { BrowserBarcodeReader, BrowserQRCodeReader } = require('@zxing/library/esm5')
 
 const fs = require('fs')
@@ -60,13 +74,14 @@ export default {
     return {
       onMissingOptions: [this.$t('valueOnMisingBarcodeSkipImage'), this.$t('valueOnMisingBarcodeCopyOriginal')],
       images: [],
+      processedItems: [],
       index: 0,
       currentImage: null,
       currentImagePath: null
     }
   },
   components: {
-    BackIcon
+    AlertIcon, BackIcon, CheckIcon
   },
   computed: {
     ...mapGetters([
@@ -145,12 +160,36 @@ export default {
     },
     // Handle the case where no barcode is found
     handleMissing: function () {
-      if (this.handleMissing === this.$t('valueOnMisingBarcodeCopyOriginal')) {
+      if (this.onMissingBarcode === this.$t('valueOnMisingBarcodeCopyOriginal')) {
         var fileName = path.basename(this.currentImagePath)
+        fileName = fileName.replace(/\.[^/.]+$/, '')
+        var ext = path.extname(this.currentImagePath)
 
-        var targetFile = path.join(this.targetPath, fileName)
+        var targetFile = path.join(this.targetPath, fileName + ext)
+
+        var counter = 1
+        while (fs.existsSync(targetFile)) {
+          targetFile = path.join(this.targetPath, fileName + ('-' + counter++) + ext)
+        }
 
         fs.copyFileSync(this.currentImagePath, targetFile)
+
+        this.processedItems.push({
+          from: fileName,
+          to: path.basename(targetFile),
+          status: this.$t('valueOnMisingBarcodeCopyOriginal'),
+          _cellVariants: {
+            status: 'warning'
+          }
+        })
+      } else {
+        this.processedItems.push({
+          from: path.basename(this.currentImagePath),
+          status: this.$t('valueOnMisingBarcodeSkipImage'),
+          _cellVariants: {
+            status: 'warning'
+          }
+        })
       }
     },
     // Handle the case where a barcode is found
@@ -166,6 +205,15 @@ export default {
 
       fs.copyFileSync(this.currentImagePath, targetFile)
 
+      this.processedItems.push({
+        from: path.basename(this.currentImagePath),
+        to: path.basename(targetFile),
+        status: 'success',
+        _cellVariants: {
+          status: 'success'
+        }
+      })
+
       // Progress to the next image
       if (this.index < this.images.length) {
         this.handleImage()
@@ -175,6 +223,8 @@ export default {
     },
     // Start the process
     start: function () {
+      this.processedItems = []
+      this.index = 0
       var vm = this
       // Read source folder and get all images
       fs.readdir(this.sourcePath, function (error, list) {
@@ -188,7 +238,6 @@ export default {
         })
 
         // Start processing
-        vm.index = 0
         vm.handleImage()
       })
     }
