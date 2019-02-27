@@ -6,7 +6,6 @@
         <b-button-group class="float-right flex-wrap">
           <b-btn size=sm :title="$t('buttonTitleSelectImage')" @click="onSelectImage()"><image-plus-icon :title="$t('buttonTitleSelectImage')" /></b-btn>
           <b-btn size=sm :title="$t('buttonTitleRemoveImage')" v-if="barcode.image" @click="barcode.image = null"><image-off-icon :title="$t('buttonTitleRemoveImage')"/></b-btn>
-          <b-btn size=sm :title="$t('buttonTitleShowBarcode')" :pressed.sync="barcodeTypeVisible"><barcode-scan-icon :title="$t('buttonTitleShowBarcode')"/></b-btn>
           <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="$emit('delete')" variant="danger"><delete-icon :title="$t('buttonTitleDeleteBarcode')"/></b-btn>
         </b-button-group>
         <b-button-group class="float-right flex-wrap">
@@ -15,9 +14,6 @@
         </b-button-group>
       </b-col>
     </b-row>
-    <b-card-body class="no-print">
-      <b-form-select :options="barcodeTypes" v-model="barcode.type" v-if="barcodeTypeVisible"/>
-    </b-card-body>
     <b-row class="card-body d-flex flex-column">
       <div class="mt-auto barcode-holder">
         <div v-if="barcode.show && barcode.text" :title="$t('titleClickToChangeBarcode')">
@@ -34,7 +30,10 @@
                 width=1 height=25 fontSize=14 background="rgba(0,0,0,0)" textMargin=0
                 @click.native="onBarcodeClicked()" />
         </div>
-        <input v-else v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" @blur="onFocusLost($event)" v-on:keyup.enter="onFocusLost($event)"/>
+        <b-form v-else @submit.prevent class="barcode-form" @blur="onFocusLost($event)">
+          <b-form-input v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" v-on:keyup.enter="onFocusLost($event)" v-b-tooltip.focus :title="$t('tooltipBarcodeEnter')"/>
+          <b-form-select class="no-print" :options="barcodeTypes" v-model="barcode.type" @change="forceFocus()"/>
+        </b-form>
       </div>
     </b-row>
   </b-card>
@@ -58,7 +57,6 @@ export default {
   name: 'barcode',
   data: function () {
     return {
-      barcodeTypeVisible: false,
       barcodeTypes: [
         'CODE128', 'CODE39', 'QR'
       ]
@@ -102,14 +100,17 @@ export default {
     onFocusLost: function (event) {
       this.barcode.show = true
     },
+    forceFocus: function () {
+      var ref = this.$refs.barcodeText
+      ref.focus()
+      ref.setSelectionRange(0, ref.value.length)
+    },
     onBarcodeClicked: function () {
       this.barcode.show = false
 
       var vm = this
       this.$nextTick(function () {
-        var ref = vm.$refs.barcodeText
-        ref.focus()
-        ref.setSelectionRange(0, ref.value.length)
+        vm.forceFocus()
       })
     },
     onSelectImage: function () {
@@ -167,6 +168,15 @@ export default {
   }
   .qr-label {
     display: block;
+  }
+  .barcode-form *:first-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .barcode-form *:last-child {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   @media print {

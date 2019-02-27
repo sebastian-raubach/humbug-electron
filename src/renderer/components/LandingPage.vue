@@ -140,6 +140,11 @@
       },
       print: function (event) {
         var vm = this
+
+        this.barcodes.forEach(function (b) {
+          b.show = true
+        })
+
         dialog.showSaveDialog({
           filters: [{
             name: 'PDF',

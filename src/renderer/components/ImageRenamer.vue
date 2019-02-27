@@ -44,13 +44,13 @@
 
       <p />
 
-      <b-table striped hover bordered responsive :items="processedItems" v-if="processedItems" >
+      <b-table striped hover bordered responsive :fields="fields" :items="processedItems" v-if="processedItems && processedItems.length > 0" >
         <template slot="status" slot-scope="data">
-          <check-icon v-if="data.value === 'success'" />
-          <template v-else>
+          <template v-if="data.value">
             <alert-icon />
             {{ data.value }}
           </template>
+          <check-icon v-else />
         </template>
       </b-table>
     </b-container>
@@ -74,6 +74,7 @@ export default {
     return {
       onMissingOptions: [this.$t('valueOnMisingBarcodeSkipImage'), this.$t('valueOnMisingBarcodeCopyOriginal')],
       images: [],
+      fields: ['from', 'to', 'status'],
       processedItems: [],
       index: 0,
       currentImage: null,
@@ -208,7 +209,6 @@ export default {
       this.processedItems.push({
         from: path.basename(this.currentImagePath),
         to: path.basename(targetFile),
-        status: 'success',
         _cellVariants: {
           status: 'success'
         }

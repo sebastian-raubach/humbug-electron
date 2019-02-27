@@ -10,7 +10,6 @@
   "buttonExportPdf": "Export PDF",
   "buttonTitleSelectImage": "Select image",
   "buttonTitleRemoveImage": "Remove image",
-  "buttonTitleShowBarcode": "Choose barcode type",
   "buttonTitleDeleteBarcode": "Delete barcode",
   "buttonTitleMoveUp": "Move up",
   "buttonTitleMoveDown": "Move down",
@@ -52,5 +51,6 @@
   "aboutMessageOne": "Humbug was written, designed and developed by Sebastian Raubach and Paul Shaw.",
   "aboutMessageTwo": "The following people have been instrumental in getting Humbug up and running: Iain Milne and Gordon Stephen.",
   "aboutLicense": "License",
-  "navigationBack": "Go back"
+  "navigationBack": "Go back",
+  "tooltipBarcodeEnter": "Click enter to set barcode"
 }
