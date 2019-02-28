@@ -1,8 +1,8 @@
 {
   "name": "humbug",
-  "version": "2.19.2",
+  "version": "2.19.3",
   "author": "sebastian-raubach <sebastian.raubach@hutton.ac.uk>",
-  "homepage": "https://ics.hutton.ac.uk/humbug/",
+  "homepage": "https://ics.hutton.ac.uk/get-humbug/",
   "repository": {
     "type": "git",
     "url": "https://github.com/sebastian-raubach/humbug-electron"
@@ -54,15 +54,15 @@
     },
     "mac": {
       "icon": "build/icons/icon.icns",
-      "artifactName":  "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
       "icon": "build/icons/icon.ico",
-      "artifactName":  "${productName}-${version}-${arch}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "linux": {
       "icon": "build/icons",
-      "artifactName":  "${productName}-${version}-${arch}.${ext}",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
       "target": [
         "AppImage",
         "deb"
@@ -78,6 +78,7 @@
     "compare-versions": "^3.4.0",
     "jquery": "^3.3.1",
     "sharp": "^0.21.3",
+    "uuid": "^3.3.2",
     "vue": "^2.5.16",
     "vue-barcode": "^1.2.0",
     "vue-electron": "^1.0.6",

@@ -1,15 +1,19 @@
+const uuidv4 = require('uuid/v4')
+
 const state = {
   defaultBarcodeType: 'CODE128',
   onMissingBarcode: 'Skip image',
   locale: 'en_GB',
-  versionToIgnore: null
+  versionToIgnore: null,
+  uuid: uuidv4()
 }
 
 const getters = {
   defaultBarcodeType: state => state.defaultBarcodeType,
   onMissingBarcode: state => state.onMissingBarcode,
   locale: state => state.locale,
-  versionToIgnore: state => state.versionToIgnore
+  versionToIgnore: state => state.versionToIgnore,
+  uuid: state => state.uuid
 }
 
 const mutations = {
@@ -24,6 +28,9 @@ const mutations = {
   },
   SET_VERSION_TO_IGNORE (state, newVersionToIgnore) {
     state.versionToIgnore = newVersionToIgnore
+  },
+  SET_UUID (state, newUuid) {
+    state.uuid = newUuid
   }
 }
 
@@ -39,6 +46,9 @@ const actions = {
   },
   setVersionToIgnore ({ commit }, versionToIgnore) {
     commit('SET_VERSION_TO_IGNORE', versionToIgnore)
+  },
+  setUuid ({ commit }, uuid) {
+    commit('SET_UUID', uuid)
   }
 }
 

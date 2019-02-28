@@ -12,13 +12,22 @@
   const shell = remote.shell
   const ipc = require('electron').ipcRenderer
   const compareVersions = require('compare-versions')
+  const axios = require('axios')
+  const os = require('os')
 
   export default {
     name: 'humbug',
+    data: function () {
+      return {
+        trackingUrl: 'https://ics.hutton.ac.uk/resources/humbug/logs/humbug.pl',
+        version: app.getVersion()
+      }
+    },
     computed: {
       ...mapGetters([
         'locale',
-        'versionToIgnore'
+        'versionToIgnore',
+        'uuid'
       ])
     },
     methods: {
@@ -29,6 +38,18 @@
       onLocaleChange: function (event, newLocale) {
         this.$i18n.locale = newLocale
         this.$store.dispatch('setLocale', newLocale)
+      },
+      trackHit () {
+        var osName = os.type()
+        var osVersion = os.release()
+        var osArch = os.arch()
+
+        var osString = osName + ' ' + osVersion + ' (' + osArch + ')'
+
+        axios.get(this.trackingUrl + '?id=' + encodeURIComponent(this.uuid) + '&version=' + encodeURIComponent(this.version) + '&locale=' + encodeURIComponent(this.locale) + '&os=' + encodeURIComponent(osString))
+          .catch(function () {
+            console.error('error tracking app usage')
+          })
       },
       checkForUpdates (automaticTrigger) {
         var vm = this
@@ -132,7 +153,10 @@
         i18n: this.$i18n.messages[this.locale]
       })
 
-      this.checkForUpdates(true)
+      if (process.env.NODE_ENV !== 'development') {
+        this.checkForUpdates(true)
+        this.trackHit()
+      }
     },
     beforeDestroy: function () {
       // Stop listening; teardown
