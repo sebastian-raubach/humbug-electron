@@ -105,11 +105,6 @@ function createMenuTemplate (locale) {
         {
           label: messages.menuFileImport,
           submenu: [{
-            label: messages.menuFileImportClipboard,
-            click () {
-              mainWindow.webContents.send('importDataClipboard')
-            }
-          }, {
             label: messages.menuFileImportJson,
             click () {
               mainWindow.webContents.send('importDataJson')
@@ -118,6 +113,11 @@ function createMenuTemplate (locale) {
             label: messages.menuFileImportText,
             click () {
               mainWindow.webContents.send('importDataTxt')
+            }
+          }, {
+            label: messages.menuFileImportClipboard,
+            click () {
+              mainWindow.webContents.send('importDataClipboard')
             }
           }]
         },
@@ -173,7 +173,7 @@ function createMenuTemplate (locale) {
         {
           label: messages.menuHelpOnline,
           click () {
-            shell.openExternal('https://github.com/sebastian-raubach/humbug/wiki')
+            shell.openExternal('https://github.com/sebastian-raubach/humbug-electron/wiki')
           }
         }, {
           label: messages.menuHelpCheckUpdates,

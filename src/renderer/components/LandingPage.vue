@@ -179,7 +179,13 @@
                 delete b.image.base64
               }
             })
-            fs.writeFileSync(file, JSON.stringify(clone), 'utf-8')
+
+            var result = {
+              settings: vm.settings,
+              barcodes: clone
+            }
+
+            fs.writeFileSync(file, JSON.stringify(result), 'utf-8')
           }
         })
       },
@@ -200,7 +206,15 @@
           if (file && file.length > 0) {
             var json = JSON.parse(fs.readFileSync(file[0], 'utf-8'))
 
-            await vm.onJsonLoaded(json)
+            try {
+              await vm.onJsonLoaded(json)
+            } catch (err) {
+              dialog.showMessageBox(app.getCurrentWindow(), {
+                type: 'error',
+                title: vm.$t('dialogErrorTitle'),
+                message: vm.$t('dialogJsonImportErrorMessage')
+              })
+            }
           }
         })
       },
@@ -228,13 +242,19 @@
         })
       },
       async onJsonLoaded (json) {
-        for (var i = 0; i < json.length; i++) {
-          if (json[i].image && json[i].image.path) {
-            json[i].image.base64 = await this.getSmallBase64(json[i].image.path)
+        for (var i = 0; i < json.barcodes.length; i++) {
+          if (json.barcodes[i].image && json.barcodes[i].image.path) {
+            try {
+              json.barcodes[i].image.base64 = await this.getSmallBase64(json.barcodes[i].image.path)
+            } catch (err) {
+              // Image wasn't found
+              json.barcodes[i].image = null
+            }
           }
         }
 
-        this.barcodes = json
+        this.settings = json.settings
+        this.barcodes = json.barcodes
       },
       onProcessClipboard: function () {
         var lines = this.clipboardContent.split('\n')

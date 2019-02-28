@@ -39,7 +39,7 @@
 
       <div class="text-center">
         <b-btn-group>
-          <b-btn @click="open('https://ics.hutton.ac.uk/humbug')"><web-icon /> {{ $t('buttonVisitHomepage') }}</b-btn>
+          <b-btn @click="open('https://ics.hutton.ac.uk/get-humbug')"><web-icon /> {{ $t('buttonVisitHomepage') }}</b-btn>
           <b-btn @click="open('https://github.com/sebastian-raubach/humbug-electron')"><github-circle-icon /> {{ $t('buttonVisitGithub') }}</b-btn>
           <b-btn @click="open('mailto:germinate@hutton.ac.uk?subject=Humbug')"><email-icon /> {{ $t('buttonSendEmail') }}</b-btn>
           <b-btn @click="open('https://twitter.com/cropgeeks')"><twitter-icon /> {{ $t('buttonFollowTwitter') }}</b-btn>

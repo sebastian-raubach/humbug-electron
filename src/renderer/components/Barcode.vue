@@ -14,27 +14,29 @@
         </b-button-group>
       </b-col>
     </b-row>
-    <b-row class="card-body d-flex flex-column">
-      <div class="mt-auto barcode-holder">
-        <div v-if="barcode.show && barcode.text" :title="$t('titleClickToChangeBarcode')">
-          <template v-if="barcode.type === 'QR'">
-            <qrcode class="barcode" :value="barcode.text" @click.native="onBarcodeClicked()"/>
-            <span class="qr-label">{{ barcode.text }}</span>
-          </template>
-          <v-barcode
-                v-else
-                :value="barcode.text"
-                :format="barcode.type" 
-                class="barcode"
-                font="Segoe UI"
-                width=1 height=25 fontSize=14 background="rgba(0,0,0,0)" textMargin=0
-                @click.native="onBarcodeClicked()" />
+    <b-row class="card-body">
+      <b-col xs=12 class="d-flex flex-column">
+        <div class="mt-auto barcode-holder">
+          <div v-if="barcode.show && barcode.text" :title="$t('titleClickToChangeBarcode')">
+            <template v-if="barcode.type === 'QR'">
+              <qrcode class="barcode" :value="barcode.text" @click.native="onBarcodeClicked()"/>
+              <span class="qr-label">{{ barcode.text }}</span>
+            </template>
+            <v-barcode
+                  v-else
+                  :value="barcode.text"
+                  :format="barcode.type" 
+                  class="barcode"
+                  font="Segoe UI"
+                  width=1 height=25 fontSize=14 background="rgba(0,0,0,0)" textMargin=0
+                  @click.native="onBarcodeClicked()" />
+          </div>
+          <b-form v-else @submit.prevent class="barcode-form" @blur="onFocusLost($event)">
+            <b-form-input v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" v-on:keyup.enter="onFocusLost($event)" v-b-tooltip.focus :title="$t('tooltipBarcodeEnter')"/>
+            <b-form-select class="no-print" :options="barcodeTypes" v-model="barcode.type" @change="forceFocus()"/>
+          </b-form>
         </div>
-        <b-form v-else @submit.prevent class="barcode-form" @blur="onFocusLost($event)">
-          <b-form-input v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" v-on:keyup.enter="onFocusLost($event)" v-b-tooltip.focus :title="$t('tooltipBarcodeEnter')"/>
-          <b-form-select class="no-print" :options="barcodeTypes" v-model="barcode.type" @change="forceFocus()"/>
-        </b-form>
-      </div>
+      </b-col>
     </b-row>
   </b-card>
 </template>

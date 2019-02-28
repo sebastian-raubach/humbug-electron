@@ -223,9 +223,18 @@ export default {
     },
     // Start the process
     start: function () {
+      var vm = this
+      if (!this.sourcePath || !this.targetPath) {
+        dialog.showMessageBox(app.getCurrentWindow(), {
+          type: 'error',
+          title: vm.$t('dialogErrorTitle'),
+          message: vm.$t('dialogImageRenamingSpecifyFolders')
+        })
+        return
+      }
+
       this.processedItems = []
       this.index = 0
-      var vm = this
       // Read source folder and get all images
       fs.readdir(this.sourcePath, function (error, list) {
         if (error) {
