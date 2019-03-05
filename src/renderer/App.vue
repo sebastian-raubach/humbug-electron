@@ -74,7 +74,7 @@
                     var result = compareVersions(response.data.tag_name, app.getVersion())
                     if (result === 1) {
                       vm.showUpdateDialog(response.data)
-                    } else {
+                    } else if (automaticTrigger !== true) {
                       vm.showNoUpdateDialog()
                     }
                   } catch (err) {
@@ -153,10 +153,10 @@
         i18n: this.$i18n.messages[this.locale]
       })
 
-      if (process.env.NODE_ENV !== 'development') {
-        this.checkForUpdates(true)
-        this.trackHit()
-      }
+      // if (process.env.NODE_ENV !== 'development') {
+      this.checkForUpdates(true)
+      // this.trackHit()
+      // }
     },
     beforeDestroy: function () {
       // Stop listening; teardown
