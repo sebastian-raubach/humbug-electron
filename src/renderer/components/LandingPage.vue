@@ -41,17 +41,19 @@
         </b-col>
       </b-form>
       <!-- Make sure only #nrOfColumns items per row (for printing) -->
-      <b-row v-for="i in Math.ceil(barcodes.length / (+settings.nrOfColumns))" :key="i" class="print-row">
-        <b-col v-for="(barcode, index) in getBarcodeChunk(i - 1)" :key="index" :cols="12 / settings.nrOfColumns" class="mb-4">
-          <Barcode :maxHeight="settings.maxHeight"
-                   :barcode="barcode"
-                   :index="{ position: ((i - 1) * settings.nrOfColumns) + index, total: barcodes.length }"
-                   :ref="'barcode-' + (((i - 1) * settings.nrOfColumns) + index)"
-                   v-on:delete="() => deleteBarcode(((i - 1) * settings.nrOfColumns) + index)"
-                   v-on:moveUp="() => moveUp(((i - 1) * settings.nrOfColumns) + index)"
-                   v-on:moveDown="() => moveDown(((i - 1) * settings.nrOfColumns) + index)" />
-        </b-col>
-      </b-row>
+      <template v-if="barcodes">
+        <b-row v-for="i in Math.ceil(barcodes.length / (+settings.nrOfColumns))" :key="i" class="print-row">
+          <b-col v-for="(barcode, index) in getBarcodeChunk(i - 1)" :key="index" :cols="12 / settings.nrOfColumns" class="mb-4">
+            <Barcode :maxHeight="settings.maxHeight"
+                    :barcode="barcode"
+                    :index="{ position: ((i - 1) * settings.nrOfColumns) + index, total: barcodes.length }"
+                    :ref="'barcode-' + (((i - 1) * settings.nrOfColumns) + index)"
+                    v-on:delete="() => deleteBarcode(((i - 1) * settings.nrOfColumns) + index)"
+                    v-on:moveUp="() => moveUp(((i - 1) * settings.nrOfColumns) + index)"
+                    v-on:moveDown="() => moveDown(((i - 1) * settings.nrOfColumns) + index)" />
+          </b-col>
+        </b-row>
+      </template>
       
       <b-btn class="no-print" variant="primary" @click="addBarcode()"><barcode-icon /> {{ $t("buttonAddBarcode") }}</b-btn>
       <b-btn class="no-print" variant="danger" v-b-modal.clear :disabled="!barcodes || barcodes.length === 0"><delete-icon /> {{ $t("buttonClear") }}</b-btn>
@@ -102,7 +104,8 @@
     computed: {
       ...mapGetters([
         'defaultBarcodeType',
-        'pdfPath'
+        'pdfPath',
+        'stateBarcodes'
       ])
     },
     components: { Barcode, BarcodeIcon, DeleteIcon, FilePdfIcon },
@@ -281,6 +284,10 @@
       ipc.on('importDataClipboard', this.importDataClipboard)
       ipc.on('importDataJson', this.importDataJson)
       ipc.on('importDataTxt', this.importDataTxt)
+
+      if (this.stateBarcodes && this.stateBarcodes.length > 0) {
+        this.barcodes = JSON.parse(JSON.stringify(this.stateBarcodes))
+      }
     },
     beforeDestroy: function () {
       ipc.removeAllListeners('onPrint')
@@ -288,6 +295,8 @@
       ipc.removeAllListeners('importDataClipboard')
       ipc.removeAllListeners('importDataJson')
       ipc.removeAllListeners('importDataTxt')
+
+      this.$store.dispatch('setBarcodes', this.barcodes)
     }
   }
 </script>

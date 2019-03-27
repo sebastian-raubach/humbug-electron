@@ -5,7 +5,8 @@ const state = {
   onMissingBarcode: 'Skip image',
   locale: 'en_GB',
   versionToIgnore: null,
-  uuid: uuidv4()
+  uuid: uuidv4(),
+  stateBarcodes: []
 }
 
 const getters = {
@@ -13,7 +14,8 @@ const getters = {
   onMissingBarcode: state => state.onMissingBarcode,
   locale: state => state.locale,
   versionToIgnore: state => state.versionToIgnore,
-  uuid: state => state.uuid
+  uuid: state => state.uuid,
+  stateBarcodes: state => state.stateBarcodes
 }
 
 const mutations = {
@@ -31,6 +33,9 @@ const mutations = {
   },
   SET_UUID (state, newUuid) {
     state.uuid = newUuid
+  },
+  SET_BARCODES (state, newStateBarcodes) {
+    state.stateBarcodes = newStateBarcodes
   }
 }
 
@@ -49,6 +54,9 @@ const actions = {
   },
   setUuid ({ commit }, uuid) {
     commit('SET_UUID', uuid)
+  },
+  setBarcodes ({ commit }, stateBarcodes) {
+    commit('SET_BARCODES', stateBarcodes)
   }
 }
 

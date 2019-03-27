@@ -105,7 +105,9 @@ export default {
     forceFocus: function () {
       var ref = this.$refs.barcodeText
       ref.focus()
-      ref.setSelectionRange(0, ref.value.length)
+      if (ref.value) {
+        ref.setSelectionRange(0, ref.value.length)
+      }
     },
     onBarcodeClicked: function () {
       this.barcode.show = false
