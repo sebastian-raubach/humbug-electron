@@ -6,7 +6,9 @@ const state = {
   locale: 'en_GB',
   versionToIgnore: null,
   uuid: uuidv4(),
-  stateBarcodes: []
+  stateBarcodes: [],
+  nrOfColumns: 3,
+  maxImageHeight: '300'
 }
 
 const getters = {
@@ -15,7 +17,9 @@ const getters = {
   locale: state => state.locale,
   versionToIgnore: state => state.versionToIgnore,
   uuid: state => state.uuid,
-  stateBarcodes: state => state.stateBarcodes
+  stateBarcodes: state => state.stateBarcodes,
+  nrOfColumns: state => state.nrOfColumns,
+  maxImageHeight: state => state.maxImageHeight
 }
 
 const mutations = {
@@ -36,6 +40,12 @@ const mutations = {
   },
   SET_BARCODES (state, newStateBarcodes) {
     state.stateBarcodes = newStateBarcodes
+  },
+  SET_NR_OF_COLUMNS (state, newNrOfColumns) {
+    state.nrOfColumns = newNrOfColumns
+  },
+  SET_MAX_IMAGE_HEIGHT (state, newMaxImageHeight) {
+    state.maxImageHeight = newMaxImageHeight
   }
 }
 
@@ -57,6 +67,12 @@ const actions = {
   },
   setBarcodes ({ commit }, stateBarcodes) {
     commit('SET_BARCODES', stateBarcodes)
+  },
+  setNrOfColumns ({ commit }, nrOfColumns) {
+    commit('SET_NR_OF_COLUMNS', nrOfColumns)
+  },
+  setMaxImageHeight ({ commit }, maxImageHeight) {
+    commit('SET_MAX_IMAGE_HEIGHT', maxImageHeight)
   }
 }
 

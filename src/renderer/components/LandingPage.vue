@@ -96,7 +96,7 @@
         clipboardContent: null,
         settings: {
           nrOfColumns: 3,
-          maxHeight: '400'
+          maxHeight: '300'
         },
         barcodes: []
       }
@@ -105,7 +105,9 @@
       ...mapGetters([
         'defaultBarcodeType',
         'pdfPath',
-        'stateBarcodes'
+        'stateBarcodes',
+        'nrOfColumns',
+        'maxImageHeight'
       ])
     },
     components: { Barcode, BarcodeIcon, DeleteIcon, FilePdfIcon },
@@ -285,8 +287,15 @@
       ipc.on('importDataJson', this.importDataJson)
       ipc.on('importDataTxt', this.importDataTxt)
 
+      // Load setting variables from the store
       if (this.stateBarcodes && this.stateBarcodes.length > 0) {
         this.barcodes = JSON.parse(JSON.stringify(this.stateBarcodes))
+      }
+      if (this.nrOfColumns) {
+        this.settings.nrOfColumns = this.nrOfColumns
+      }
+      if (this.maxImageHeight) {
+        this.settings.maxHeight = this.maxImageHeight
       }
     },
     beforeDestroy: function () {
@@ -296,7 +305,10 @@
       ipc.removeAllListeners('importDataJson')
       ipc.removeAllListeners('importDataTxt')
 
+      // Save changes to setting variables to the store
       this.$store.dispatch('setBarcodes', this.barcodes)
+      this.$store.dispatch('setNrOfColumns', this.settings.nrOfColumns)
+      this.$store.dispatch('setMaxImageHeight', this.settings.maxHeight)
     }
   }
 </script>
