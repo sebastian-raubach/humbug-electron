@@ -31,8 +31,8 @@
                   width=1 height=25 fontSize=14 background="rgba(0,0,0,0)" textMargin=0
                   @click.native="onBarcodeClicked()" />
           </div>
-          <b-form v-else @submit.prevent class="barcode-form" @blur="onFocusLost($event)">
-            <b-form-input v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" v-on:keyup.enter="onFocusLost($event)" v-b-tooltip.focus :title="$t('tooltipBarcodeEnter')"/>
+          <b-form v-else @submit.prevent class="barcode-form" >
+            <b-form-input v-model="barcode.text" ref="barcodeText" @focus="barcode.show = false" @blur="onFocusLost($event)" v-on:keyup.enter="onFocusLost($event)" v-b-tooltip.focus :title="$t('tooltipBarcodeEnter')"/>
             <b-form-select class="no-print" :options="barcodeTypes" v-model="barcode.type" @change="forceFocus()"/>
           </b-form>
         </div>
@@ -100,7 +100,9 @@ export default {
       return (this.barcode.text === undefined || this.barcode.text.length < 1) ? 'no-print' : ''
     },
     onFocusLost: function (event) {
-      this.barcode.show = true
+      if (!event.relatedTarget || event.relatedTarget.parentNode !== event.target.parentNode) {
+        this.barcode.show = true
+      }
     },
     forceFocus: function () {
       var ref = this.$refs.barcodeText

@@ -55,9 +55,11 @@
         </b-row>
       </template>
       
-      <b-btn class="no-print" variant="primary" @click="addBarcode()"><barcode-icon /> {{ $t("buttonAddBarcode") }}</b-btn>
-      <b-btn class="no-print" variant="danger" v-b-modal.clear :disabled="!barcodes || barcodes.length === 0"><delete-icon /> {{ $t("buttonClear") }}</b-btn>
-      <b-btn class="no-print" variant="success" :disabled="!barcodes || barcodes.length === 0" @click="print"><file-pdf-icon /> {{ $t("buttonExportPdf") }}</b-btn>
+      <div class="mb-4">
+        <b-btn class="no-print" variant="primary" @click="addBarcode()"><barcode-icon /> {{ $t("buttonAddBarcode") }}</b-btn>
+        <b-btn class="no-print" variant="danger" v-b-modal.clear :disabled="!barcodes || barcodes.length === 0"><delete-icon /> {{ $t("buttonClear") }}</b-btn>
+        <b-btn class="no-print" variant="success" :disabled="!barcodes || barcodes.length === 0" @click="print"><file-pdf-icon /> {{ $t("buttonExportPdf") }}</b-btn>
+      </div>
 
       <b-modal ref="clipboardPreview" :title="$t('dialogImportClipboardTitle')" @ok="onProcessClipboard()">
         <p>{{ $t("dialogImportClipboardMessage") }}</p>
