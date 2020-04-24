@@ -55,5 +55,7 @@
   "aboutMessageTwo": "Die folgenden Personen waren an der Entwicklung von Humbug beteiligt: Iain Milne und Gordon Stephen.",
   "aboutLicense": "Lizenz",
   "navigationBack": "Zurück gehen",
-  "tooltipBarcodeEnter": "Enter drücken um Barcode zu setzen"
+  "tooltipBarcodeEnter": "Enter drücken um Barcode zu setzen",
+  "labelBarcodeHeight": "Barcodehöhe",
+  "labelBarcodeWidth": "Barcodebalkenbreite"
 }

@@ -55,5 +55,7 @@
   "aboutMessageTwo": "The following people have been instrumental in getting Humbug up and running: Iain Milne and Gordon Stephen.",
   "aboutLicense": "License",
   "navigationBack": "Go back",
-  "tooltipBarcodeEnter": "Click enter to set barcode"
+  "tooltipBarcodeEnter": "Click enter to set barcode",
+  "labelBarcodeHeight": "Barcode height",
+  "labelBarcodeWidth": "Barcode bar width"
 }

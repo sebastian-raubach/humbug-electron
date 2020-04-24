@@ -39,12 +39,42 @@
             </b-form-select>
           </b-form-group>
         </b-col>
+        <b-col sm=4>
+          <b-form-group :label="$t('labelBarcodeHeight')" label-for="height">
+            <b-form-input id="height"
+                          type="number"
+                          :value="barcodeHeight"
+                          @change="(value) => $store.dispatch('setBarcodeHeight', value)"
+                          required
+                          min=10
+                          max=100
+                          :placeholder="$t('labelBarcodeHeight')">
+            </b-form-input>
+          </b-form-group>
+        </b-col>
+        <b-col sm=4>
+          <b-form-group :label="$t('labelBarcodeWidth')" label-for="width">
+            <b-form-input id="width"
+                          type="number"
+                          :value="barcodeWidth"
+                          @change="(value) => $store.dispatch('setBarcodeWidth', value)"
+                          required
+                          min=1
+                          max=3
+                          :placeholder="$t('labelBarcodeWidth')">
+            </b-form-input>
+          </b-form-group>
+        </b-col>
       </b-form>
+    </b-container>
+    <b-container fluid>
       <!-- Make sure only #nrOfColumns items per row (for printing) -->
       <template v-if="barcodes">
         <b-row v-for="i in Math.ceil(barcodes.length / (+settings.nrOfColumns))" :key="i" class="print-row">
           <b-col v-for="(barcode, index) in getBarcodeChunk(i - 1)" :key="index" :cols="12 / settings.nrOfColumns" class="mb-4">
             <Barcode :maxHeight="settings.maxHeight"
+                    :height="settings.barcodeHeight"
+                    :width="settings.barcodeWidth"
                     :barcode="barcode"
                     :index="{ position: ((i - 1) * settings.nrOfColumns) + index, total: barcodes.length }"
                     :ref="'barcode-' + (((i - 1) * settings.nrOfColumns) + index)"
@@ -109,11 +139,19 @@
         'pdfPath',
         'stateBarcodes',
         'nrOfColumns',
-        'maxImageHeight'
+        'maxImageHeight',
+        'barcodeHeight',
+        'barcodeWidth'
       ])
     },
     components: { Barcode, BarcodeIcon, DeleteIcon, FilePdfIcon },
     methods: {
+      onBarcodeHeightChanged: function (event) {
+        console.log(event)
+      },
+      onBarcodeWidthChanged: function (event) {
+        console.log(event)
+      },
       moveUp: function (currentIndex) {
         this.barcodes = this.arrayMove(this.barcodes, currentIndex, currentIndex - 1)
       },
@@ -260,7 +298,10 @@
           }
         }
 
-        this.settings = json.settings
+        var templateSettings = JSON.parse(JSON.stringify(this.settings))
+        Object.assign(templateSettings, json.settings)
+
+        this.settings = templateSettings
         this.barcodes = json.barcodes
       },
       onProcessClipboard: function () {

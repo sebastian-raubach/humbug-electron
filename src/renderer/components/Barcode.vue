@@ -28,7 +28,7 @@
                   :format="barcode.type" 
                   class="barcode"
                   font="Segoe UI"
-                  width=1 height=25 fontSize=14 background="rgba(0,0,0,0)" textMargin=0
+                  :width=barcodeWidth :height=barcodeHeight fontSize=14 background="rgba(0,0,0,0)" textMargin=0
                   @click.native="onBarcodeClicked()" />
           </div>
           <b-form v-else @submit.prevent class="barcode-form" >
@@ -77,7 +77,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'imagePath'
+      'imagePath',
+      'barcodeHeight',
+      'barcodeWidth'
     ])
   },
   components: {

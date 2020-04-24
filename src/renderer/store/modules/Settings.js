@@ -8,7 +8,9 @@ const state = {
   uuid: uuidv4(),
   stateBarcodes: [],
   nrOfColumns: 3,
-  maxImageHeight: '300'
+  maxImageHeight: 300,
+  barcodeHeight: 35,
+  barcodeWidth: 1
 }
 
 const getters = {
@@ -19,7 +21,9 @@ const getters = {
   uuid: state => state.uuid,
   stateBarcodes: state => state.stateBarcodes,
   nrOfColumns: state => state.nrOfColumns,
-  maxImageHeight: state => state.maxImageHeight
+  maxImageHeight: state => state.maxImageHeight,
+  barcodeHeight: state => state.barcodeHeight,
+  barcodeWidth: state => state.barcodeWidth
 }
 
 const mutations = {
@@ -46,6 +50,12 @@ const mutations = {
   },
   SET_MAX_IMAGE_HEIGHT (state, newMaxImageHeight) {
     state.maxImageHeight = newMaxImageHeight
+  },
+  SET_BARCODE_HEIGHT (state, newBarcodeHeight) {
+    state.barcodeHeight = newBarcodeHeight
+  },
+  SET_BARCODE_WIDTH (state, newBarcodeWidth) {
+    state.barcodeWidth = newBarcodeWidth
   }
 }
 
@@ -73,6 +83,12 @@ const actions = {
   },
   setMaxImageHeight ({ commit }, maxImageHeight) {
     commit('SET_MAX_IMAGE_HEIGHT', maxImageHeight)
+  },
+  setBarcodeHeight ({ commit }, barcodeHeight) {
+    commit('SET_BARCODE_HEIGHT', barcodeHeight)
+  },
+  setBarcodeWidth ({ commit }, barcodeWidth) {
+    commit('SET_BARCODE_WIDTH', barcodeWidth)
   }
 }
 
