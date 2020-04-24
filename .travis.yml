@@ -45,7 +45,7 @@ deploy:
   skip_cleanup: true
   prerelease: true
   overwrite: true
-  draft: true
+  draft: false
   file_glob: true
   file:
   - build/**/*.zip
